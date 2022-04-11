@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Justin Tsen (A01247374)</h1>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <div>Games Chart</div>
+    <div id="pie_chart_div" class="text-center"></div>
+
+    <script type="text/javascript">
+
+    google.charts.load('current', {
+            packages: ['corechart', 'bar']
+        });
+
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var jsonData = $.ajax({
+                url: '/Games/ChartData',
+                dataType: "json",
+                async: false
+            }).responseText;
+
+            PopulationChart(jsonData, "pie-chart");
+        }
+
+        function PopulationChart(jsonData, chart_type){
+            //Create our data table out of JSON data loaded from server.
+            var data = new google.visualization.DataTable(jsonData);
+            var chart;
+            var options = {title: 'Games by continent', width: 800, height: 500};
+            
+            switch (chart_type) {
+                case "pie-chart":
+                    chart = new google.visualization.PieChart(document.getElementById('pie_chart_div'));
+                    break;
+            }
+
+            chart.draw(data, options);
+            return false;
+        }
+
+    </script>
+</div>
